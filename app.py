@@ -17,13 +17,14 @@ def crear_app():
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, 'html.parser')
             data_elements = soup.find_all('div', class_='recuadrotsmc')
+            date_elements = soup.find('div', class_='dinpro').find('span').text.strip()  
 
             tasa_data = []
             for element in data_elements:
                 divisa = element.find('span').text.strip() 
                 image = element.find('img').get('src')
                 price = element.find('strong').text.strip()  
-                tasa_data.append({'name': divisa, 'price': price, 'image': url+image})
+                tasa_data.append({'name': divisa, 'price': price, 'image': url+image, 'date': date_elements})
             return jsonify(tasa_data)
         else:
             error = {'error': 'Ocurrio un error interno'}
