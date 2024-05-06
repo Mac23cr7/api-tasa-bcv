@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 import requests
 from bs4 import BeautifulSoup
 from urllib3.exceptions import InsecureRequestWarning
@@ -8,6 +9,7 @@ disable_warnings(InsecureRequestWarning)
 
 def crear_app():
     app = Flask(__name__)
+    CORS(app, origins=['*'])
 
     @app.route('/api/obtener-tasa-bcv')
     def getTasaBCV():
