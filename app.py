@@ -11,6 +11,7 @@ def crear_app():
     app = Flask(__name__)
     CORS(app, origins=['*'])
 
+    #api para obtener la tasa del BCV
     @app.route('/api/obtener-tasa-bcv')
     def getTasaBCV():
         url = "https://www.bcv.org.ve"
