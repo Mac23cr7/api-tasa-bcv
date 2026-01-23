@@ -27,7 +27,7 @@ def crear_app():
                 divisa = element.find('span').text.strip() 
                 image = element.find('img').get('src')
                 price = element.find('strong').text.strip()  
-                tasa_data.append({'name': divisa, 'price': price, 'image': url+image})
+                tasa_data.append({'name': divisa, 'price': price, 'image': image})
             return jsonify({'date':  date_elements, 'data': tasa_data})
         else:
             error = {'error': 'Ocurrio un error interno'}
