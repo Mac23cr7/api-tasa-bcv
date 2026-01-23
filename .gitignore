@@ -1,2 +1,9 @@
 .vscode
 entvirtual
+__pycache__/
+.venv/
+.vscode/
+.idea/
+.DS_Store
+.gitignore
+.env
