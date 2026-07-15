@@ -15,28 +15,47 @@ def crear_app():
     @app.route('/api/obtener-tasa-bcv')
     def getTasaBCV():
         url = "https://www.bcv.org.ve"
-        response = requests.get(url, verify=False)
+        try:
+            response = requests.get(
+                url,
+                headers={'User-Agent': 'Mozilla/5.0'},
+                verify=False,
+                timeout=15
+            )
+            response.raise_for_status()
+        except requests.RequestException as exc:
+            return jsonify({'error': 'No se pudo obtener la tasa del BCV', 'details': str(exc)}), 502
 
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, 'html.parser')
             data_elements = soup.find_all('div', class_='recuadrotsmc')
-            date_elements = soup.find('div', class_='dinpro').find('span').text.strip()  
+            date_container = soup.find('div', class_='dinpro')
+            date_elements = date_container.find('span').text.strip() if date_container and date_container.find('span') else ''
 
             tasa_data = []
             for element in data_elements:
-                divisa = element.find('span').text.strip() 
-                image = element.find('img').get('src')
-                price = element.find('strong').text.strip()  
+                span = element.find('span')
+                img = element.find('img')
+                strong = element.find('strong')
+
+                if not span or not img or not strong:
+                    continue
+
+                divisa = span.text.strip()
+                image = img.get('src')
+                price = strong.text.strip()
                 tasa_data.append({'name': divisa, 'price': price, 'image': image})
-            return jsonify({'date':  date_elements, 'data': tasa_data})
+
+            return jsonify({'date': date_elements, 'data': tasa_data})
         else:
             error = {'error': 'Ocurrio un error interno'}
             return jsonify(error)
     
     return app
 
+app = crear_app()
+
 if __name__ == '__main__':
-  app = crear_app()
   app.run()
 
 
