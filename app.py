@@ -17,7 +17,7 @@ def crear_app():
         base_url = "https://www.bcv.org.ve"
         try:
             response = requests.get(
-                url,
+                base_url,
                 headers={'User-Agent': 'Mozilla/5.0'},
                 verify=False,
                 timeout=15

@@ -34,7 +34,7 @@ http://127.0.0.1:5000/api/obtener-tasa-bcv
 
 Devuelve un JSON con la fecha y la información de las tasas del BCV.
 
-Ejemplo de respuesta:
+Ejemplo de respuesta exitosa:
 
 ```json
 {
@@ -43,9 +43,19 @@ Ejemplo de respuesta:
     {
       "name": "Dólar",
       "price": "36,00",
-      "image": "/images/dolar.png"
+      "image": "https://www.bcv.org.ve/images/dolar.png"
     }
   ]
+}
+```
+
+Si el BCV no responde o está caído, el endpoint devuelve un mensaje amigable para el frontend:
+
+```json
+{
+  "success": false,
+  "error": "No se pudo obtener la tasa del BCV",
+  "message": "La tasa del BCV no está disponible en este momento. Intenta nuevamente más tarde."
 }
 ```
 
