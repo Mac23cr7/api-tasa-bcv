@@ -23,8 +23,12 @@ def crear_app():
                 timeout=15
             )
             response.raise_for_status()
-        except requests.RequestException as exc:
-            return jsonify({'error': 'No se pudo obtener la tasa del BCV', 'details': str(exc)}), 502
+        except requests.RequestException:
+            return jsonify({
+                'success': False,
+                'error': 'No se pudo obtener la tasa del BCV',
+                'message': 'La tasa del BCV no está disponible en este momento. Intenta nuevamente más tarde.'
+            }), 502
 
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -48,8 +52,11 @@ def crear_app():
 
             return jsonify({'date': date_elements, 'data': tasa_data})
         else:
-            error = {'error': 'Ocurrio un error interno'}
-            return jsonify(error)
+            return jsonify({
+                'success': False,
+                'error': 'Ocurrió un error interno',
+                'message': 'No se pudo cargar la tasa del BCV en este momento.'
+            })
     
     return app
 
