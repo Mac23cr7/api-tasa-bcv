@@ -14,7 +14,7 @@ def crear_app():
     #api para obtener la tasa del BCV
     @app.route('/api/obtener-tasa-bcv')
     def getTasaBCV():
-        url = "https://www.bcv.org.ve"
+        base_url = "https://www.bcv.org.ve"
         try:
             response = requests.get(
                 url,
@@ -46,7 +46,8 @@ def crear_app():
                     continue
 
                 divisa = span.text.strip()
-                image = img.get('src')
+                image_src = img.get('src') or ''
+                image = image_src if image_src.startswith('http') else f"{base_url}{image_src}"
                 price = strong.text.strip()
                 tasa_data.append({'name': divisa, 'price': price, 'image': image})
 
